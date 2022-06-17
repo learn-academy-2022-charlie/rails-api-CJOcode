@@ -53,8 +53,15 @@ Story: As the consumer of the API I can see all the animals in the database. Hin
     // use GET as your HTTP verb
     // click send, all your create animals should pop up, status should be 200
         // ** Make sure server is running in terminal **
-
+        
+<-------------------------------------------------------------------------->
 Story: As the consumer of the API I can update an animal in the database.
+
+## IN Animal controller
+    def update
+        animal = Animal.find(params[:id])
+        animal.update(animal_params)
+    end
 
 <-------------------------------------------------------------------------->
 Story: As the consumer of the API I can destroy an animal in the database.
