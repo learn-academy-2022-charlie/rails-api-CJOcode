@@ -59,6 +59,17 @@ Story: As the consumer of the API I can update an animal in the database.
 <-------------------------------------------------------------------------->
 Story: As the consumer of the API I can destroy an animal in the database.
 
+## IN Animal controller
+
+    def destroy
+        animal = Animal.find(params[:id])
+        if animal.destroy
+          render json: animal
+        else
+          render json: animal.errors
+        end
+    end
+
 <-------------------------------------------------------------------------->
 Story: As the consumer of the API I can create a new animal in the database.
 
