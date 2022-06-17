@@ -19,6 +19,11 @@ class AnimalsController < ApplicationController
         end
     end
 
+    def update
+        animal = Animal.find(params[:id])
+        animal.update(animal_params)
+    end
+
     def destroy
         animal = Animal.find(params[:id])
         if animal.destroy
