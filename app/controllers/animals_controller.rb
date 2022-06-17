@@ -7,16 +7,16 @@ class AnimalsController < ApplicationController
 
     def show
         animal = Animal.find(params[:id])
-        if stident.valid?
-            render json: animal
-        else
-            rendor json: animal.errors
-        end
+        rendor json: animal
     end
 
     def create 
         animal = Animal.create(animal_params)
-
+        if animal.valid?
+            render json: animal
+        else
+            render json: animal.errors
+        end
     end
 
     private

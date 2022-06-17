@@ -66,14 +66,22 @@ Story: As the consumer of the API I can create a new animal in the database.
 
     def create 
         animal = Animal.create(animal_params)
+        if animal.valid?
+            render json: animal
+        else
+            render json: animal.errors
+        end
     end
 
     private // stops users form accessing this method
     def animal_params
         params.require(:animal).permit(:common_name, :latin_name, :kingdom)
     end
-// create method/ RESTful route allows us to create the new animals.
+// CREATE method / RESTful route allows us to create the new animals.
+    // the IF statement allows us to see if the new animal if what user entered is valid and if not show us why it isn't working.
+        // should get back a 200 for status when entered in post man
 // then underneath the private key word animal_params only permit users to enter the common name, latin_name and Kingdom. Not allowing them to mess with the ID and dev specific keys.
+
 
 ## In Application controller:
 
