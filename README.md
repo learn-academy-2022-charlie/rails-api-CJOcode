@@ -28,22 +28,26 @@ Terminal:
 --  Animal.create common_name:"alligator", latin_name:"alligator missis
 sippiensis", kingdom:"animalia" 
 
+
+<-------------------------------------------------------------------------->
 Story: As the consumer of the API I can see all the animals in the database. Hint: Make a few animals using Rails Console
 
-// In contoller:
+## In Animal contoller:
+    
     def index 
         animals = Animal.all
         render json: animals
         //--> since API's have no UI and we deleted the views(app/views/animals) form our app, must render JSON.
     end
+    
     def show
         animal = Animal.find(params[:id])
         render json: animal
     end
         // SHOW method allows us to look up individual animals
         // localhost:3000/animals/:id 
-
-// Open Postman, 
+    
+## Open Postman, 
     // add new file, 
     // paste localhost:3000/animals("route") in url bar.
     // use GET as your HTTP verb
@@ -51,14 +55,66 @@ Story: As the consumer of the API I can see all the animals in the database. Hin
         // ** Make sure server is running in terminal **
 
 Story: As the consumer of the API I can update an animal in the database.
+
+<-------------------------------------------------------------------------->
 Story: As the consumer of the API I can destroy an animal in the database.
+
+<-------------------------------------------------------------------------->
 Story: As the consumer of the API I can create a new animal in the database.
+
+## In Animal contoller:
+
+    def create 
+        animal = Animal.create(animal_params)
+    end
+
+    private // stops users form accessing this method
+    def animal_params
+        params.require(:animal).permit(:common_name, :latin_name, :kingdom)
+    end
+// create method/ RESTful route allows us to create the new animals.
+// then underneath the private key word animal_params only permit users to enter the common name, latin_name and Kingdom. Not allowing them to mess with the ID and dev specific keys.
+
+## In Application controller:
+
+    class ApplicationController < ActionController::Base
+
+    skip_before_action :verify_authenticity_token 
+// this allows your application to by pass Postmate's security measures and access if the data base.
+// ** if you forget this you will not be allowed to create a new animal **
+
+    end
+
+## In Postman
+
+// Use POST for the route, localhost:3000/animals
+    // under url bar select body, raw, and JSON
+    // type in your new animal (extremely case sensitive)
+        {
+        "common_name": "jaguar",
+        "latin_name": "panthero onca",
+        "kingdom": "animalia"
+        }
+    // your new animal should be created
+
+// Check by running a GET, localhost:3000/animals 
+    // your new animal should be listed with all the others.
+
+<-------------------------------------------------------------------------->
 Story: As the consumer of the API I can create a sighting of an animal with date (use the datetime datatype), a latitude, and a longitude.
 Hint: An animal has_many sightings. (rails g resource Sighting animal_id:integer ...)
 Hint: Datetime is written in Rails as “year-month-day hr:min:sec" (“2022-01-28 05:40:30")
+
+<-------------------------------------------------------------------------->
 Story: As the consumer of the API I can update an animal sighting in the database.
+
+<-------------------------------------------------------------------------->
 Story: As the consumer of the API I can destroy an animal sighting in the database.
+
+<-------------------------------------------------------------------------->
 Story: As the consumer of the API, when I view a specific animal, I can also see a list sightings of that animal.
 Hint: Checkout the Ruby on Rails API docs on how to include associations.
+
+<-------------------------------------------------------------------------->
 Story: As the consumer of the API, I can run a report to list all sightings during a given time period.
 Hint: Your controller can look like this:
