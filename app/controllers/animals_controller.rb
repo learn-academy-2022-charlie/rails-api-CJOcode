@@ -7,7 +7,7 @@ class AnimalsController < ApplicationController
 
     def show
         animal = Animal.find(params[:id])
-        rendor json: animal
+        render json: animal, include: :sightings
     end
 
     def create 

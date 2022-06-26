@@ -131,16 +131,99 @@ Story: As the consumer of the API I can create a sighting of an animal with date
 Hint: An animal has_many sightings. (rails g resource Sighting animal_id:integer ...)
 Hint: Datetime is written in Rails as “year-month-day hr:min:sec" (“2022-01-28 05:40:30")
 
+## In terminal: 
+
+    -- rails g resource Sighting animal_id:integer date:datetime latitude:string longitude:string
+    -- rails db:migrate
+
+ ## In sightings_controller
+    
+    def create 
+        sighting = Sighting.create(sighting_params)
+        if sighting.valid?
+            render json: sighting
+        else
+            render json: sighting.errors
+        end
+    end
+
+    private
+    def sighting_params
+        params.require(:sighting).permit(:animal_id, :date, :latitude, :longitude)
+    end 
+// sets params for what to be entered to create sighting in postman
+
+## In Postman
+    -- Set http verb to post, typed localhost:3000/sightings
+
+// enter in sighting params
+
+    --> {
+        "animal_id": 1,
+        "date": "2022-03-24T12:30:30.000Z",
+        "latitude": "17°N",
+        "longitude": "14°E"
+        }
+
+// check its entered by using GET localhost:3000/sightings
+    -- new sighting should pop up
+
+
 <-------------------------------------------------------------------------->
 Story: As the consumer of the API I can update an animal sighting in the database.
 
+## In sighting controller
+    def update
+        sighting = Sighting.find(params[:animal_id])
+        sighting.update(sighting_params)
+    end
+
+## In Postman
+    -- set HTTP verb to PUT; URL - localhost:3000/sightings
+// update info you want
+    {
+    "animal_id": 1,
+    "date": "2022-04-24T12:30:30.000Z",
+    "latitude": "17°N",
+    "longitude": "14°E"
+    }
+
+
 <-------------------------------------------------------------------------->
 Story: As the consumer of the API I can destroy an animal sighting in the database.
+
+## In sighting controller
+    def destroy
+        sighting = Sighting.find(params[:id])
+        if animal.destroy
+          render json: sighting
+        else
+          render json: sighting.errors
+        end
+    end
+
+## In Postman
+    -- set HTTP verb to DELETE; URL: localhost:3000/sightings/1 --> (sighting_id)
+
+
+
 
 <-------------------------------------------------------------------------->
 Story: As the consumer of the API, when I view a specific animal, I can also see a list sightings of that animal.
 Hint: Checkout the Ruby on Rails API docs on how to include associations.
 
+## In Animal Controller
+    def show
+        animal = Animal.find(params[:id])
+        render json: animal, include: :sightings 
+    end
+// include: includes the model Sighting into the show route when ran
+
+## in Postman
+    -- set HTTP verb to get; URL: localhost:3000/animals/1 --> (sighting_id)
+
 <-------------------------------------------------------------------------->
 Story: As the consumer of the API, I can run a report to list all sightings during a given time period.
 Hint: Your controller can look like this:
+
+## In Sighting Controller
