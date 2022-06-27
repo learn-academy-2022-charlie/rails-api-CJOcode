@@ -227,3 +227,14 @@ Story: As the consumer of the API, I can run a report to list all sightings duri
 Hint: Your controller can look like this:
 
 ## In Sighting Controller
+    def index 
+        def index
+            sightings = Sighting.where(timeline_params)
+            render json: sightings
+        end
+    end
+
+### strong params
+    def timeline_params
+        params.require(:sightings).permit(date: params[:start_date]..params[:end_date])
+    end

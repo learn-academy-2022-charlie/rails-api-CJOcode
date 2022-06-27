@@ -4,7 +4,6 @@ class SightingsController < ApplicationController
         def index
             sightings = Sighting.where(timeline_params)
             render json: sightings
-        
         end
     end
 
